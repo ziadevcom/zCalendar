@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zCalander</title>
+    <link rel="stylesheet" href="./app.css" />
+    <link rel="stylesheet" href="./introjs.css" />
+  </head>
+  <body>
+    <main id="app">
+      <div id="social">
+        <a href="https://github.com/ziadevcom/" target="_blank">
+          <img src="./images/github.svg" alt="github profile" />
+        </a>
+        <a href="https://twitter.com/IamZiaAhmad" target="_blank">
+          <img src="./images/twitter.svg" alt="twitter profile" />
+        </a>
+        <a href="mailto:ziaalich@gmail.com" target="_blank">
+          <img src="./images/envelope.svg" alt="email" />
+        </a>
+      </div>
+      <div id="calendar-parent">
+        <div id="hello">
+          <h1 class="greetings">Hi there, <span class="name">Zia!</span></h1>
+        </div>
+        <div id="calendar">
+          <div class="calendar-header">
+            <div class="month">February 2020</div>
+            <div class="navigation">
+              <button class="previous"><</button><button class="next">></button>
+            </div>
+          </div>
+          <div class="calendary-body">
+            <div class="weekdays">
+              <div class="weekend">Sun</div>
+              <div>Mon</div>
+              <div>Tue</div>
+              <div>Wed</div>
+              <div>Thu</div>
+              <div>Fri</div>
+              <div class="weekend">Sat</div>
+            </div>
+            <div class="days"></div>
+          </div>
+        </div>
+      </div>
+      <div id="events">
+        <div class="header">
+          <div class="current-date">
+            <h2 class="greetings"><span class="name">Feb 1, </span>Monday</h2>
+          </div>
+          <button class="add-new-event">+ Create</button>
+        </div>
+        <div class="timeline">
+          <div class="event" time="twelveAM">
+            <div class="event-header">12 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="oneAM">
+            <div class="event-header">1 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="twoAM">
+            <div class="event-header">2 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="threeAM">
+            <div class="event-header">3 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="fourAM">
+            <div class="event-header">4 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="fiveAM">
+            <div class="event-header">5 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="sixAM">
+            <div class="event-header">6 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="sevenAM">
+            <div class="event-header">7 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="eightAM">
+            <div class="event-header">8 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="nineAM">
+            <div class="event-header">9 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="tenAM">
+            <div class="event-header">10 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="elevenAM">
+            <div class="event-header">11 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="twelvePM">
+            <div class="event-header">12 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="onePM">
+            <div class="event-header">1 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="twoPM">
+            <div class="event-header">2 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="threePM">
+            <div class="event-header">3 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="fourPM">
+            <div class="event-header">4 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="fivePM">
+            <div class="event-header">5 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="sixPM">
+            <div class="event-header">6 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="sevenPM">
+            <div class="event-header">7 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="eightPM">
+            <div class="event-header">8 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="ninePM">
+            <div class="event-header">9 PM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="tenPM">
+            <div class="event-header">10 AM</div>
+            <div class="event-body"></div>
+          </div>
+          <div class="event" time="elevenPM">
+            <div class="event-header">11 PM</div>
+            <div class="event-body"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div id="name" style="display: none">
+      <div class="input-wrapper">
+        <h1 class="greetings">Please enter your name:</h1>
+        <input type="text" id="user" placeholder="Zia Ahmad" />
+        <small
+          >Name field shouldn't be empty and should between 1-10 letters.</small
+        >
+        <input type="submit" class="btn" id="enter-user" value="Continue" />
+        <span
+          onclick='closeIcon(document.querySelector(".name"), "remove")'
+          class="closeIcon"
+          >x</span
+        >
+      </div>
+    </div>
+    <div class="add-task" style="display: none">
+      <div class="input-wrapper">
+        <h1 class="greetings">Enter Required Info.</h1>
+        <input type="text" name="taskHeading" placeholder="Heading" />
+        <input
+          type="text"
+          name="taskURL"
+          placeholder="Associated Link e.g (https://google.com)"
+        />
+        <textarea
+          name="taskDescription"
+          placeholder="Description"
+          cols="30"
+          rows="10"
+        ></textarea>
+        <small>At least heading is necessary. Description is optional.</small>
+        <input type="submit" class="btn" id="add-task" value="Add Task" />
+        <span
+          onclick='closeIcon(document.querySelector(".add-task"), "hide")'
+          class="closeIcon"
+          >x</span
+        >
+      </div>
+    </div>
+    <script src="./app.js"></script>
+    <script src="./intro.js"></script>
+  </body>
+</html>
