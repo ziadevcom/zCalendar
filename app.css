@@ -154,6 +154,20 @@ body {
 [data-selected] {
   background: var(--body-bg);
 }
+.date.hasTasks {
+  position: relative;
+}
+.date.hasTasks::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--date-bg);
+  border-radius: 50%;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .today {
   background: var(--date-bg);
   border-radius: 2px;

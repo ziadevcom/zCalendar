@@ -1,4 +1,9 @@
 const days = document.querySelector(".days"),
+  previousMonthUI = document.querySelector(".previous"),
+  nextMonthUI = document.querySelector(".next"),
+  addUserNameUI = document.getElementById("enter-user"),
+  saveTaskButtonUI = document.querySelector(".add-new-event"),
+  tasksTimelineUI = document.querySelectorAll(".event-body"),
   date = new Date(),
   months = [
     "January",
@@ -22,15 +27,10 @@ const days = document.querySelector(".days"),
     "Thursday",
     "Friday",
     "Saturday",
-  ],
-  previous = document.querySelector(".previous"),
-  next = document.querySelector(".next"),
-  addUserName = document.getElementById("enter-user"),
-  newTask = document.querySelector(".add-new-event"),
-  eventBody = document.querySelectorAll(".event-body");
+  ];
 
-let selectedDate,
-  dates,
+let datesDivUI,
+  selectedDate,
   selectedTimestamp,
   taskMode = false,
   month = date.getMonth(),
@@ -38,26 +38,15 @@ let selectedDate,
 
 // EventListeners
 document.addEventListener("DOMContentLoaded", () => {
+  // Incase User Already Exists
   if (localStorage.getItem("name")) {
     makeCalendar();
   } else {
     document.querySelector("#name").style.display = "grid";
   }
 });
-
-previous.addEventListener("click", () => {
-  date.setMonth(date.getMonth() - 1);
-  days.innerHTML = "";
-  makeCalendar();
-});
-
-next.addEventListener("click", () => {
-  date.setMonth(date.getMonth() + 1);
-  days.innerHTML = "";
-  makeCalendar();
-});
-// Initializing the app
-addUserName.addEventListener("click", (e) => {
+// Incase User Does not Exist
+addUserNameUI.addEventListener("click", (e) => {
   let userName = document.querySelector("#user");
   if (userName.value === "" || userName.value < 1 || userName.value > 10) {
     return (userName.style.border = "1px solid red");
@@ -67,39 +56,122 @@ addUserName.addEventListener("click", (e) => {
     makeCalendar();
   }
 });
+// Previous Month Button
+previousMonthUI.addEventListener("click", () => {
+  date.setMonth(date.getMonth() - 1);
+  days.innerHTML = "";
+  makeCalendar();
+});
+// Next Month Button
+nextMonthUI.addEventListener("click", () => {
+  date.setMonth(date.getMonth() + 1);
+  days.innerHTML = "";
+  makeCalendar();
+});
 
 // Task adding functionality
-eventBody.forEach((ev) => {
+tasksTimelineUI.forEach((ev) => {
   ev.addEventListener("click", function () {
-    selectTimeAndAddTask(this);
+    onClickTime(this);
   });
 });
-newTask.addEventListener("click", saveTaskToLocalStorage);
+// onClick Task Save Button
+saveTaskButtonUI.addEventListener("click", saveTaskToLocalStorage);
 
 // Calendar Functionality
 function makeCalendar() {
-  const thisMonthLastDay = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-  ).getDate();
+  month = date.getMonth();
+  year = date.getFullYear();
+  renderDates();
+  setTodaysDate();
+  updateOtherUIStuff();
+  addIndicatorIfTasksArePresentForThatDate();
+  tour();
+  function renderDates() {
+    // render previous month dates
+    let monthDates = [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+    ];
+    let previousMonthDaysCount = 0 + date.getDay() - 1;
+    const previousMonthDaysArr = monthDates.slice(previousMonthDaysCount * -1);
+    previousMonthDaysArr.forEach((date) => {
+      appendDiv(date, "not-date", `${date}-${months[month - 1]}-${year}`);
+    });
 
-  const previousMonthLastDay = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    0
-  ).getDate();
+    // render this month dates
+    const currentMonthDaysCount = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDate();
+    for (let i = 1; i <= currentMonthDaysCount; i++) {
+      appendDiv(i, "date", `${i}-${months[month]}-${year}`);
+    }
 
-  const firstDayOfMonthIndex = date.getDay();
+    // render next month dates
+    const IndexOfLastDayOfCurrentMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDay();
+    const nextMonthDaysCount = 7 - IndexOfLastDayOfCurrentMonth;
+    for (let i = 1; i < nextMonthDaysCount; i++) {
+      appendDiv(i, "not-date", `${i}-${months[month + 1]}-${year}`);
+    }
+  }
+  function setTodaysDate() {
+    Array.from(days.children).forEach((day) => {
+      if (
+        Number(day.innerText) === new Date().getDate() &&
+        date.getMonth() === new Date().getMonth() &&
+        date.getFullYear() === new Date().getFullYear() &&
+        !day.classList.contains("not-date")
+      ) {
+        day.classList.add("today");
+      }
+    });
+  }
+  function updateOtherUIStuff() {
+    const monthUI = document.querySelector(".month"),
+      eventDateUI = document.querySelector(".current-date h2"),
+      userNameUI = document.querySelector("span.name");
 
-  const lastDayOfMonthIndex = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-  ).getDay();
-
-  const nextDays = 7 - lastDayOfMonthIndex;
-
+    monthUI.innerText = `${months[month]} ${year}`;
+    eventDateUI.innerText = `${date.getDate()} ${months[month]}, ${
+      weekDays[date.getDay()]
+    }`;
+    userNameUI.innerText = localStorage.getItem("name");
+  }
   function appendDiv(data, classes, date) {
     let div = document.createElement("div");
     div.innerText = data;
@@ -107,73 +179,42 @@ function makeCalendar() {
     classes ? (div.className = classes) : (div.className = "");
     days.append(div);
   }
-
-  for (let i = firstDayOfMonthIndex; i > 0; i--) {
-    let day = previousMonthLastDay - i + 1;
-    appendDiv(day, "not-date", `${day}-${months[month - 1]}-${year}`);
-  }
-
-  for (let i = 1; i <= thisMonthLastDay; i++) {
-    appendDiv(i, "date", `${i}-${months[month]}-${year}`);
-  }
-  for (let i = 1; i < nextDays; i++) {
-    appendDiv(i, "not-date", `${i}-${months[month + 1]}-${year}`);
-  }
-  Array.from(days.children).forEach((day) => {
-    if (
-      Number(day.innerText) === new Date().getDate() &&
-      date.getMonth() === new Date().getMonth() &&
-      date.getFullYear() === new Date().getFullYear() &&
-      !day.classList.contains("not-date")
-    ) {
-      day.classList.add("today");
-    }
+  // Dates onClick Event. This also working as initializing of tasks adding functionality
+  datesDivUI = document.querySelectorAll(".date");
+  datesDivUI.forEach((date) => {
+    date.addEventListener("click", onClickDate);
   });
-  document.querySelector(".month").innerText = `${months[month]} ${year}`;
-  document.querySelector(".current-date h2").innerText = `${date.getDate()} ${
-    months[month]
-  }, ${weekDays[date.getDay()]}`;
-  document.querySelector("span.name").innerText = localStorage.getItem("name");
-
-  // Initializing the adding functionality
-  dates = document.querySelectorAll(".date");
-  dates.forEach((date) => {
-    date.addEventListener("click", selectDateAndUpdateUI);
-  });
-  tour();
 }
 
-// Events/Tasks adding functionality
-function selectDateAndUpdateUI() {
+// Tasks adding functionality
+function onClickDate() {
   if (this.getAttribute("data-selected")) {
     taskMode = false;
     return this.removeAttribute("data-selected");
   }
   taskMode = true;
   let date = this.getAttribute("date");
-  dates.forEach((d) => d.removeAttribute("data-selected"));
+  datesDivUI.forEach((d) => d.removeAttribute("data-selected"));
   this.setAttribute("data-selected", "true");
   selectedDate = date;
 
   // Ui stuff
   document.querySelector(".current-date h2").innerText = `${this.innerText} ${
     months[month]
-  }, ${weekDays[new Date(selectedDate).getDay() + 1]}`;
+  }, ${weekDays[new Date(selectedDate).getDay()]}`;
   displaySavedTasksPerDate();
 }
-
-function selectTimeAndAddTask(timestamp) {
+function onClickTime(timestamp) {
   if (timestamp.classList.contains("TaskMode")) {
     return timestamp.classList.remove("TaskMode");
   }
   if (!taskMode) {
     return notify("Please select a date first.");
   }
-  eventBody.forEach((t) => t.classList.remove("TaskMode"));
+  tasksTimelineUI.forEach((t) => t.classList.remove("TaskMode"));
   timestamp.classList.add("TaskMode");
   selectedTimestamp = timestamp.parentElement.getAttribute("time");
 }
-
 function saveTaskToLocalStorage() {
   if (!taskMode || !selectedTimestamp) {
     return notify("Please select a date and time for task first.");
@@ -219,11 +260,11 @@ function saveTaskToLocalStorage() {
       taskAdder.style.display = "none";
       displaySavedTasksPerDate();
     }
-    eventBody.forEach((el) => el.classList.remove("TaskMode"));
+    tasksTimelineUI.forEach((el) => el.classList.remove("TaskMode"));
   };
 }
 function displaySavedTasksPerDate() {
-  eventBody.forEach((el) => (el.innerHTML = ""));
+  tasksTimelineUI.forEach((el) => (el.innerHTML = ""));
   let tasks = JSON.parse(localStorage.getItem("tasks")),
     colors = [
       { text: "#00203F", bg: "#ADF0D1" },
@@ -254,11 +295,12 @@ function displaySavedTasksPerDate() {
     span.classList.add("animated", "bounceInDown");
     span.setAttribute("description", task.description);
     span.setAttribute("link", task.url);
-    span.setAttribute("onclick", "toggleNote(this)");
+    span.setAttribute("onclick", "openTask(this)");
     document.querySelector(`[time='${task.time}']`).children[1].append(span);
   });
+  addIndicatorIfTasksArePresentForThatDate();
 }
-function toggleNote(element) {
+function openTask(element) {
   let noteDIV = document.createElement("div");
   noteDIV.classList.add("task");
   noteDIV.innerHTML = `<div class="input-wrapper noteBody">
@@ -278,6 +320,13 @@ function toggleNote(element) {
 </div>`;
   document.body.append(noteDIV);
 }
+function addIndicatorIfTasksArePresentForThatDate() {
+  let tasks = JSON.parse(localStorage.getItem("tasks"));
+  tasks.forEach((task) => {
+    document.querySelector(`[date='${task.date}']`).classList.add("hasTasks");
+  });
+}
+
 function closeIcon(el, func) {
   if (func === "hide") {
     el.style.display = "none";
@@ -307,7 +356,7 @@ function tour() {
           },
           {
             title: "2. Second Step",
-            element: eventBody[1],
+            element: tasksTimelineUI[1],
             intro:
               "Select the hour you want to add a task. Click and you will see a green tick on right side representing the current selected hour",
           },
@@ -323,7 +372,7 @@ function tour() {
           },
           {
             title: "5. Fifth Step",
-            element: eventBody[1],
+            element: tasksTimelineUI[1],
             intro:
               "Here's your task saved. You can click on the task to see description and other information.",
           },
