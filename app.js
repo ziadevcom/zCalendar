@@ -323,7 +323,8 @@ function openTask(element) {
 function addIndicatorIfTasksArePresentForThatDate() {
   let tasks = JSON.parse(localStorage.getItem("tasks"));
   tasks.forEach((task) => {
-    document.querySelector(`[date='${task.date}']`).classList.add("hasTasks");
+    let item = document.querySelector(`[date='${task.date}']`);
+    item ? item.classList.add("hasTasks") : "";
   });
 }
 
