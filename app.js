@@ -89,45 +89,28 @@ function makeCalendar() {
   tour();
   function renderDates() {
     // render previous month dates
-    let monthDates = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28,
-      29,
-      30,
-      31,
-    ];
+    const previousMonthLastDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      0
+    ).getDate();
+
+    let monthDates = (function () {
+      let arr = [];
+      for (i = 1; i <= previousMonthLastDate; i++) {
+        arr.push(i);
+      }
+      return arr;
+    })();
     let previousMonthDaysCount = 0 + date.getDay() - 1;
-    const previousMonthDaysArr = monthDates.slice(previousMonthDaysCount * -1);
+    const previousMonthDaysArr =
+      previousMonthDaysCount === -1
+        ? monthDates.slice(-6)
+        : monthDates.slice(previousMonthDaysCount * -1);
+
     previousMonthDaysArr.forEach((date) => {
       appendDiv(date, "not-date", `${date}-${months[month - 1]}-${year}`);
     });
-
     // render this month dates
     const currentMonthDaysCount = new Date(
       date.getFullYear(),
@@ -321,8 +304,9 @@ function openTask(element) {
   document.body.append(noteDIV);
 }
 function addIndicatorIfTasksArePresentForThatDate() {
-  let tasks = JSON.parse(localStorage.getItem("tasks"));
-  tasks.forEach((task) => {
+  let tasks = localStorage.getItem("tasks");
+  if (tasks === null) return;
+  JSON.parse(tasks).forEach((task) => {
     let item = document.querySelector(`[date='${task.date}']`);
     item ? item.classList.add("hasTasks") : "";
   });
