@@ -26,15 +26,15 @@ const days = document.querySelector(".days"),
   previous = document.querySelector(".previous"),
   next = document.querySelector(".next"),
   addUserName = document.getElementById("enter-user"),
-  month = date.getMonth(),
-  year = date.getFullYear(),
   newTask = document.querySelector(".add-new-event"),
   eventBody = document.querySelectorAll(".event-body");
 
 let selectedDate,
   dates,
   selectedTimestamp,
-  taskMode = false;
+  taskMode = false,
+  month = date.getMonth(),
+  year = date.getFullYear();
 
 // EventListeners
 document.addEventListener("DOMContentLoaded", () => {
@@ -132,7 +132,7 @@ function makeCalendar() {
   document.querySelector(".month").innerText = `${months[month]} ${year}`;
   document.querySelector(".current-date h2").innerText = `${date.getDate()} ${
     months[month]
-  }, ${weekDays[date.getDate() - 1]}`;
+  }, ${weekDays[date.getDay()]}`;
   document.querySelector("span.name").innerText = localStorage.getItem("name");
 
   // Initializing the adding functionality
@@ -158,7 +158,7 @@ function selectDateAndUpdateUI() {
   // Ui stuff
   document.querySelector(".current-date h2").innerText = `${this.innerText} ${
     months[month]
-  }, ${weekDays[new Date(selectedDate).getDay()]}`;
+  }, ${weekDays[new Date(selectedDate).getDay() + 1]}`;
   displaySavedTasksPerDate();
 }
 
