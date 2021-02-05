@@ -5,7 +5,6 @@ const days = document.querySelector(".days"),
   addUserNameUI = document.getElementById("enter-user"),
   saveTaskButtonUI = document.querySelector(".add-new-event"),
   tasksTimelineUI = document.querySelectorAll(".event-body"),
-  date = new Date(),
   months = [
     "January",
     "February",
@@ -31,6 +30,7 @@ const days = document.querySelector(".days"),
   ];
 
 let datesDivUI,
+  date = new Date(),
   selectedDate,
   selectedTimestamp,
   taskMode = false,
@@ -73,11 +73,8 @@ nextMonthUI.onclick = () => {
 };
 // Current Month Button
 currentMonthUI.onclick = () => {
-  date.setMonth(new Date().getMonth());
+  date = new Date();
   makeCalendar();
-  document.querySelector(".month").innerText = `${
-    months[month]
-  } ${new Date().getFullYear()}`;
 };
 
 // Task adding functionality
