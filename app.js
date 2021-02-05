@@ -75,6 +75,9 @@ nextMonthUI.onclick = () => {
 currentMonthUI.onclick = () => {
   date.setMonth(new Date().getMonth());
   makeCalendar();
+  document.querySelector(".month").innerText = `${
+    months[month]
+  } ${new Date().getFullYear()}`;
 };
 
 // Task adding functionality
