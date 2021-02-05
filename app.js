@@ -1,6 +1,7 @@
 const days = document.querySelector(".days"),
   previousMonthUI = document.querySelector(".previous"),
   nextMonthUI = document.querySelector(".next"),
+  currentMonthUI = document.querySelector(".reset"),
   addUserNameUI = document.getElementById("enter-user"),
   saveTaskButtonUI = document.querySelector(".add-new-event"),
   tasksTimelineUI = document.querySelectorAll(".event-body"),
@@ -57,17 +58,20 @@ addUserNameUI.addEventListener("click", (e) => {
   }
 });
 // Previous Month Button
-previousMonthUI.addEventListener("click", () => {
+previousMonthUI.onclick = () => {
   date.setMonth(date.getMonth() - 1);
-  days.innerHTML = "";
   makeCalendar();
-});
+};
 // Next Month Button
-nextMonthUI.addEventListener("click", () => {
+nextMonthUI.onclick = () => {
   date.setMonth(date.getMonth() + 1);
-  days.innerHTML = "";
   makeCalendar();
-});
+};
+// Current Month Button
+currentMonthUI.onclick = () => {
+  date.setMonth(new Date().getMonth());
+  makeCalendar();
+};
 
 // Task adding functionality
 tasksTimelineUI.forEach((ev) => {
@@ -80,6 +84,7 @@ saveTaskButtonUI.addEventListener("click", saveTaskToLocalStorage);
 
 // Calendar Functionality
 function makeCalendar() {
+  days.innerHTML = "";
   month = date.getMonth();
   year = date.getFullYear();
   renderDates();
@@ -94,23 +99,27 @@ function makeCalendar() {
       date.getMonth(),
       0
     ).getDate();
-
-    let monthDates = (function () {
-      let arr = [];
-      for (i = 1; i <= previousMonthLastDate; i++) {
-        arr.push(i);
-      }
-      return arr;
-    })();
-    let previousMonthDaysCount = 0 + date.getDay() - 1;
-    const previousMonthDaysArr =
-      previousMonthDaysCount === -1
-        ? monthDates.slice(-6)
-        : monthDates.slice(previousMonthDaysCount * -1);
-
-    previousMonthDaysArr.forEach((date) => {
-      appendDiv(date, "not-date", `${date}-${months[month - 1]}-${year}`);
-    });
+    const previousMonthDaysCount = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      1
+    ).getDay();
+    // function that checks if previous month has any days to render and renders on conditional logic
+    if (previousMonthDaysCount) {
+      let monthDates = (function () {
+        let arr = [];
+        for (i = 1; i <= previousMonthLastDate; i++) {
+          arr.push(i);
+        }
+        return arr;
+      })();
+      const previousMonthDaysArr = monthDates.slice(
+        previousMonthDaysCount * -1
+      );
+      previousMonthDaysArr.forEach((date) => {
+        appendDiv(date, "not-date", `${date}-${months[month - 1]}-${year}`);
+      });
+    }
     // render this month dates
     const currentMonthDaysCount = new Date(
       date.getFullYear(),
