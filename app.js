@@ -49,7 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
 // Incase User Does not Exist
 addUserNameUI.addEventListener("click", (e) => {
   let userName = document.querySelector("#user");
-  if (userName.value === "" || userName.value < 1 || userName.value > 10) {
+  if (
+    userName.value === "" ||
+    userName.value.length < 1 ||
+    userName.value.length > 10
+  ) {
     return (userName.style.border = "1px solid red");
   } else {
     localStorage.setItem("name", userName.value);
@@ -301,7 +305,9 @@ function openTask(element) {
   <small>Task Description:</small>
   <p>${element.getAttribute("description")}</p>
   <small>Link:</small>
-  <a class='${element.getAttribute("link") === "#" ? "disabled" : ""}' href='${
+  <a target='_blank' ${
+    element.getAttribute("link") === "#" ? "class='disabled'" : ""
+  } href='${
     element.getAttribute("link") !== "#" ? element.getAttribute("link") : "#"
   }'>${
     element.getAttribute("link") !== "#"
@@ -336,6 +342,7 @@ function tour() {
       .setOptions({
         disableInteraction: false,
         showBullets: false,
+        showProgress: true,
         steps: [
           {
             title: "👋 Welcome, lets learn how to use this app.",
@@ -377,7 +384,10 @@ function tour() {
           },
         ],
       })
-      .oncomplete(function () {
+      .onbeforeexit(function () {
+        return confirm("Are you sure you want to exit the tutorial?");
+      })
+      .onexit(function () {
         localStorage.setItem("tour", "true");
       })
       .start();

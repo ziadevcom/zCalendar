@@ -192,11 +192,13 @@ body {
   transform: translateX(-50%);
 }
 .today {
-  background: var(--date-bg);
+  background: var(--date-bg) !important;
   border-radius: 2px;
   color: var(--text-color-white) !important;
 }
-
+.today.hasTasks::after {
+  background: var(--text-color-white);
+}
 #events {
   display: grid;
   grid-template-rows: 15% 85%;
@@ -392,6 +394,12 @@ textarea {
   background: white !important;
   color: black !important;
   border: none;
+}
+.introjs-progress {
+  background: var(--text-color-white) !important;
+}
+.introjs-progressbar {
+  background: var(--text-color-light) !important;
 }
 .noteBody {
   position: relative;
